@@ -1,5 +1,10 @@
-make a state variable for incorrect key presses
-make a state for correct words
-make a state for total correct key presses
 
-styling
+fix input feild
+create gamereacap popup with stats after game ends
+make new game button functional 
+
+
+create server 
+create database 
+
+create stat page

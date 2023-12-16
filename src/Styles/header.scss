@@ -5,3 +5,42 @@ $text-color: #d6d2bc;
 $error-color: #ff4a59;
 $caret-color: #e2b714;
 
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#logo {
+  height: 85px;
+  margin-left: 30px;
+}
+
+.header-list {
+  display: flex;
+  justify-content: flex-end;
+  list-style:none;
+}
+
+.header-list li {
+  padding-right: 20px;
+  letter-spacing: -1px;
+  text-decoration: none;
+  color: #8f8e84;
+}
+
+.header-list li:hover {
+  padding-right: 20px;
+  letter-spacing: -1px;
+  text-decoration: none;
+  color: #e2b714;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}

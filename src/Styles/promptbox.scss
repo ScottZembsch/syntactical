@@ -7,18 +7,50 @@ $caret-color: #e2b714;
 
 .promptbox {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   line-height: 35px;
-  height: 105px;
-  overflow: hidden;
+  width: 100%;
+  height: 90%;
+  margin-top: 12%;
 }
 
+.game-menu {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 800px;
+}
+
+.timer {
+  font-size: 30px;
+  color: #e2b714;
+  padding-right: 320px;
+}
+
+#newGame {
+  background-color:#8f8e84;
+  border: none;
+  height: 30px;
+  width: 80px;
+  border-radius: 10px;
+}
+
+#newGame:hover {
+  background-color: #e2b714;
+  cursor: pointer;
+  }
+
 #code-text {
+  width: 800px;
   color: $sub-color;
   font-size: 18px;
   white-space: pre-wrap;
   overflow-x: auto;
-  display: inline;
+  overflow-y: auto;
+  // display: inline-block;
 }
 
 #input-field {
@@ -26,7 +58,8 @@ $caret-color: #e2b714;
   text-align: center;
   text-decoration: none;
   border: solid;
-  display: block;
+  width: 800px;
+  // display: inline-block;
 }
 
 #input-field:focus, input-field:focus{
@@ -35,6 +68,7 @@ $caret-color: #e2b714;
 
 .word{
   display: inline-block;
+  position: relative;
 }
 
 .char{
@@ -48,3 +82,10 @@ $caret-color: #e2b714;
 .incorrectChar {
   color: $error-color;
 }
+
+.currChar {
+  text-decoration: underline solid $caret-color;
+  color: $caret-color;
+}
+
+
