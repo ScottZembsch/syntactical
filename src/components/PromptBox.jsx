@@ -3,36 +3,43 @@ import prompts from '../prompts';
 import '../Styles/promptbox.scss';
 
 function PromptBox() {
+
   const promptArr = prompts.javascript2;
   const prompt = useRef(promptArr);
 
+  //---------------------- STATE MANAGEMENT ---------------------- //
   const [userInput, setUserInput] = useState('');
   const [currWordIndex, setCurrWordIndex] = useState(0);
   const [currCharIndex, setCurrCharIndex] = useState(0);
   const [correct, setCorrect] = useState(Array(promptArr.length).fill(''));
   // SET CORRECT AND INCORRECT KEY PRESSES // 
-  // const [incorrectKeyPress, setIncorrectKeyPress] = useState(1);
   const [incorrectKeyPress, setIncorrectKeyPress] = useState([]);
-
   const [correctKeyPress, setCorrectKeyPress] = useState(1);
   // TIMER // 
   const [time, setTime] = useState(30)
   const [timeStart, setTimeStart] = useState(false);
+  const [timeEnd, setTimeEnd] = useState(false);
 
-  // CHECKS IF PROMPT HAS ENDED AND RESETS GAME STATE
+
+
+  // ------------ CHECKS IF PROMPT HAS ENDED AND RESETS GAME STATE ------------- //
   useEffect(() => {
     if (currWordIndex >= promptArr.length) {
-      setCurrCharIndex(0);
-      setCurrWordIndex(0);
       gameRecap()
+      fullReset()
       return;
-    } else if (time === 0){
-      gameRecap();
-      return;
-    }
+    } 
   }, [currWordIndex, promptArr.length]);
 
-  //  TIMER FUNCTIONALITY TO COUNTDOWN // 
+  // -------------------------- CHECKS FOR TIMER UP ----------------------- // 
+  useEffect(()=>{
+    if (timeEnd === true){
+      gameRecap();
+      fullReset();
+    }
+  }, [timeEnd])
+
+  // --------------------- TIMER FUNCTIONALITY TO COUNTDOWN ------------------- // 
   useEffect(() => {
     let timeInt;
 
@@ -41,27 +48,68 @@ function PromptBox() {
         setTime((prevTimer) => prevTimer - 1);
       }, 1000);
     }
+    if (time === 0) {
+      setTimeEnd(true);
+    }
     return () => clearInterval(timeInt);
   }, [timeStart, time]);
 
-  function gameRecap(){
 
+
+  // -------------------------- GAME RECAP FUNCTION ---------------------- // 
+  function gameRecap(){
+    console.log('words per min: ',getWPM(correct) )
   }
 
+
+  // ------------------------- GET WPM FUNCTION -------------------------- // 
+  function getWPM(arr){
+    const result = [];
+    
+    const wpmArr = arr.filter(el => el !== '')
+  
+    wpmArr.map(el => {
+      if (el.includes('.')){
+        const newArr = el.split('.')
+        newArr.forEach(el => result.push(el));
+      } else {
+        result.push(el)
+      }
+    })
+    return result.length / .5;
+  }
+
+
+  // -------------------------- FUNCTION TO RESET GAMESTATE ------------------ //
+  function fullReset(){
+    setCurrCharIndex(0);
+    setCurrWordIndex(0);
+    setTimeStart(false);
+    setTimeEnd(false);
+    setTime(30);
+    setCorrect(Array(promptArr.length).fill(''));
+    setCorrectKeyPress(1);
+    setIncorrectKeyPress([]);
+    setUserInput('Start Typing Here')
+  }
+
+
+  // ----------------------- MAIN CHAR PROCESSING FUNCTION -------------------- //
   function processInput(value) {
+
     // check to see if the input is correct
     if (value === promptArr[currWordIndex][currCharIndex]) {
       const newCorrect = [...correct];
       newCorrect[currWordIndex] += value;
       setCorrectKeyPress(correctKeyPress + 1)
       setCorrect(newCorrect);
-      console.log('correct: ', correctKeyPress);
+      // console.log('correct: ', correctKeyPress);
 
       // Update the character index for the current word
       setCurrCharIndex((index) => index + 1);
 
       if (promptArr[currWordIndex].length - 1 === currCharIndex) {
-        console.log('end word');
+        // console.log('end word');
         setCurrWordIndex((index) => index + 1);
         // Reset the character index for the next word
         setCurrCharIndex(0);
@@ -76,12 +124,14 @@ function PromptBox() {
     }
   }
 
+
+ // ------------------------ RETURN MODULE ---------------------- //
   return (
     <div className='promptbox'>
       {/* TIMER */}
       <div className='game-menu'>
         <span className='timer'>{time}</span>
-        <button id='newGame'>New Game</button>
+        <button id='newGame' onClick={()=> fullReset()}>New Game</button>
       </div>
 
       {/* TEXT PROMPT */}
