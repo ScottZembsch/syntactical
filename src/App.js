@@ -1,12 +1,12 @@
 import './Styles/app.scss';
-import PromptBox from './components/PromptBox';
 import Header from './components/Header';
+import GameMenu from './components/GameMenu';
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <PromptBox />
+      <GameMenu />
     </div>
   );
 }

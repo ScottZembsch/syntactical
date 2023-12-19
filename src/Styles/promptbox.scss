@@ -13,7 +13,7 @@ $caret-color: #e2b714;
   line-height: 35px;
   width: 100%;
   height: 90%;
-  margin-top: 12%;
+  margin-top: 2%;
 }
 
 .game-menu {
@@ -41,7 +41,11 @@ $caret-color: #e2b714;
 #newGame:hover {
   background-color: #e2b714;
   cursor: pointer;
-  }
+}
+
+#newGame:active {
+  background-color: $main-color;
+}
 
 #code-text {
   width: 800px;

@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import prompts from '../prompts';
 import '../Styles/promptbox.scss';
 
-function PromptBox() {
+
+function PromptBox({ timeSelect }) {
 
   const promptArr = prompts.javascript2;
   const prompt = useRef(promptArr);
@@ -16,11 +17,16 @@ function PromptBox() {
   const [incorrectKeyPress, setIncorrectKeyPress] = useState([]);
   const [correctKeyPress, setCorrectKeyPress] = useState(1);
   // TIMER // 
-  const [time, setTime] = useState(30)
+  const [time, setTime] = React.useState(timeSelect)
   const [timeStart, setTimeStart] = useState(false);
   const [timeEnd, setTimeEnd] = useState(false);
 
 
+
+  // ---------------- UPDATES CLOCK TO CHOSEN TIME IN GAME MENU ---------------- //
+  useEffect(() => {
+    setTime(timeSelect)
+  },[timeSelect])
 
   // ------------ CHECKS IF PROMPT HAS ENDED AND RESETS GAME STATE ------------- //
   useEffect(() => {
@@ -86,11 +92,11 @@ function PromptBox() {
     setCurrWordIndex(0);
     setTimeStart(false);
     setTimeEnd(false);
-    setTime(30);
+    setTime(timeSelect);
     setCorrect(Array(promptArr.length).fill(''));
     setCorrectKeyPress(1);
     setIncorrectKeyPress([]);
-    setUserInput('Start Typing Here')
+    setUserInput('')
   }
 
 
