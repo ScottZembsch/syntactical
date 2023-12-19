@@ -26,10 +26,13 @@ $caret-color: #e2b714;
 }
 
 .lang-btn {
-
+  border: solid #e2b714;
+  width: 100px;
+  color: whitesmoke
 }
 
 .time-btn {
-  border: solid;
+  border: solid $caret-color;
   width: 40px;
+  color: whitesmoke;
 }
