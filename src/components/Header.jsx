@@ -4,13 +4,20 @@ import syntacticalLogo from '../images/syntacticalLogoYellow.png';
 
 
 function Header() {
+
+function getStats(){
+  fetch('http://localhost:3000/stats')
+}
+
+
+
   return (
     <div id='header'>   
       <img id='logo' src={syntacticalLogo} alt="logo" />
       <ul className='header-list'>
-      <li><a href="">Stats</a></li>
-        <li><a href="">My Account</a></li>
-        <li><a href="">Sign In</a></li>
+        <button className='header-btn' onClick={() => getStats()}>Stats</button>
+        <button className='header-btn'>My Account</button>
+        <button className='header-btn'>Sign In</button>
       </ul>
 
     </div>

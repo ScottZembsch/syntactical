@@ -2,50 +2,58 @@ import React, { useState, useRef, useEffect } from 'react';
 import prompts from '../prompts';
 import '../Styles/promptbox.scss';
 
-
-function PromptBox({ timeSelect }) {
-
-  const promptArr = prompts.javascript2;
-  const prompt = useRef(promptArr);
+function PromptBox({ timeSelect, langSelect }) {
+  // const promptArrRef = useRef(prompts[langSelect]);
+  // const prompt = promptArrRef.current;
 
   //---------------------- STATE MANAGEMENT ---------------------- //
+  // LANG //
+  const promptArrRef = useRef(prompts[langSelect]);
+  const [prompt, setPrompt] = useState([])
+  // USER INPUT //
   const [userInput, setUserInput] = useState('');
   const [currWordIndex, setCurrWordIndex] = useState(0);
   const [currCharIndex, setCurrCharIndex] = useState(0);
-  const [correct, setCorrect] = useState(Array(promptArr.length).fill(''));
-  // SET CORRECT AND INCORRECT KEY PRESSES // 
+  const [correct, setCorrect] = useState(Array(promptArrRef.current.length).fill(''));
+  // SET CORRECT AND INCORRECT KEY PRESSES //
   const [incorrectKeyPress, setIncorrectKeyPress] = useState([]);
   const [correctKeyPress, setCorrectKeyPress] = useState(1);
-  // TIMER // 
-  const [time, setTime] = React.useState(timeSelect)
+  // TIMER //
+  const [time, setTime] = React.useState(timeSelect);
   const [timeStart, setTimeStart] = useState(false);
   const [timeEnd, setTimeEnd] = useState(false);
 
-
-
   // ---------------- UPDATES CLOCK TO CHOSEN TIME IN GAME MENU ---------------- //
   useEffect(() => {
-    setTime(timeSelect)
-  },[timeSelect])
+    setTime(timeSelect);
+  }, [timeSelect]);
+
+  // ------------------- UPDATES PROMPT TEXT TO NEW LANG ------------------------ //
+  useEffect(() => {
+    console.log('change');
+    promptArrRef.current = prompts[langSelect];
+    setPrompt(promptArrRef.current); // Set the prompt when the language changes
+    setCorrect(Array(promptArrRef.current.length).fill('')); // Initialize with the correct length
+  }, [langSelect]);
+
 
   // ------------ CHECKS IF PROMPT HAS ENDED AND RESETS GAME STATE ------------- //
   useEffect(() => {
-    if (currWordIndex >= promptArr.length) {
-      gameRecap()
-      fullReset()
-      return;
-    } 
-  }, [currWordIndex, promptArr.length]);
-
-  // -------------------------- CHECKS FOR TIMER UP ----------------------- // 
-  useEffect(()=>{
-    if (timeEnd === true){
+    if (currWordIndex >= promptArrRef.current.length) {
       gameRecap();
       fullReset();
     }
-  }, [timeEnd])
+  }, [currWordIndex, promptArrRef.current.length]);
 
-  // --------------------- TIMER FUNCTIONALITY TO COUNTDOWN ------------------- // 
+  // -------------------------- CHECKS FOR TIMER UP ----------------------- //
+  useEffect(() => {
+    if (timeEnd === true) {
+      gameRecap();
+      fullReset();
+    }
+  }, [timeEnd]);
+
+  // --------------------- TIMER FUNCTIONALITY TO COUNTDOWN ------------------- //
   useEffect(() => {
     let timeInt;
 
@@ -60,89 +68,84 @@ function PromptBox({ timeSelect }) {
     return () => clearInterval(timeInt);
   }, [timeStart, time]);
 
-
-
-  // -------------------------- GAME RECAP FUNCTION ---------------------- // 
-  function gameRecap(){
-    console.log('words per min: ',getWPM(correct) )
+  // -------------------------- GAME RECAP FUNCTION ---------------------- //
+  function gameRecap() {
+    console.log('words per min: ', getWPM(correct));
   }
 
-
-  // ------------------------- GET WPM FUNCTION -------------------------- // 
-  function getWPM(arr){
+  // ------------------------- GET WPM FUNCTION -------------------------- //
+  function getWPM(arr) {
     const result = [];
-    
-    const wpmArr = arr.filter(el => el !== '')
-  
-    wpmArr.map(el => {
-      if (el.includes('.')){
-        const newArr = el.split('.')
-        newArr.forEach(el => result.push(el));
-      } else {
-        result.push(el)
-      }
-    })
-    return result.length / .5;
-  }
 
+    const wpmArr = arr.filter((el) => el !== '');
+
+    wpmArr.map((el) => {
+      if (el.includes('.')) {
+        const newArr = el.split('.');
+        newArr.forEach((el) => result.push(el));
+      } else {
+        result.push(el);
+      }
+    });
+    return result.length / 0.5;
+  }
 
   // -------------------------- FUNCTION TO RESET GAMESTATE ------------------ //
-  function fullReset(){
+  function fullReset() {
     setCurrCharIndex(0);
     setCurrWordIndex(0);
     setTimeStart(false);
     setTimeEnd(false);
     setTime(timeSelect);
-    setCorrect(Array(promptArr.length).fill(''));
+    setCorrect([]);
     setCorrectKeyPress(1);
     setIncorrectKeyPress([]);
-    setUserInput('')
+    setUserInput('');
   }
-
 
   // ----------------------- MAIN CHAR PROCESSING FUNCTION -------------------- //
   function processInput(value) {
-
     // check to see if the input is correct
-    if (value === promptArr[currWordIndex][currCharIndex]) {
+    if (value === promptArrRef.current[currWordIndex][currCharIndex]) {
       const newCorrect = [...correct];
       newCorrect[currWordIndex] += value;
-      setCorrectKeyPress(correctKeyPress + 1)
+      setCorrectKeyPress(correctKeyPress + 1);
       setCorrect(newCorrect);
-      // console.log('correct: ', correctKeyPress);
 
       // Update the character index for the current word
       setCurrCharIndex((index) => index + 1);
 
-      if (promptArr[currWordIndex].length - 1 === currCharIndex) {
-        // console.log('end word');
+      if (prompt[currWordIndex].length - 1 === currCharIndex) {
         setCurrWordIndex((index) => index + 1);
         // Reset the character index for the next word
         setCurrCharIndex(0);
       }
     } else {
-      // IF WRONG CHAR PRESSED AND ALSO NOT HITTING SAME WRONG KEY AGAIN // 
-      if (incorrectKeyPress.length === 0 || value !== incorrectKeyPress[incorrectKeyPress.length - 1]){
-        setIncorrectKeyPress([...incorrectKeyPress, value])
-        // add one at end of length because it doesnt register the first error cuz nothing to check back on
-        console.log('errors : ', incorrectKeyPress.length + 1)
+      // IF WRONG CHAR PRESSED AND ALSO NOT HITTING SAME WRONG KEY AGAIN //
+      if (
+        incorrectKeyPress.length === 0 ||
+        value !== incorrectKeyPress[incorrectKeyPress.length - 1]
+      ) {
+        setIncorrectKeyPress([...incorrectKeyPress, value]);
+        console.log('errors : ', incorrectKeyPress.length + 1);
       }
     }
   }
 
-
- // ------------------------ RETURN MODULE ---------------------- //
+  // ------------------------ RETURN MODULE ---------------------- //
   return (
     <div className='promptbox'>
       {/* TIMER */}
       <div className='game-menu'>
         <span className='timer'>{time}</span>
-        <button id='newGame' onClick={()=> fullReset()}>New Game</button>
+        <button id='newGame' onClick={() => fullReset()}>
+          New Game
+        </button>
       </div>
 
       {/* TEXT PROMPT */}
       <div id='code-text'>
-        {prompt.current.map((word, wordIndex) => (
+        {prompt.map((word, wordIndex) => (
           <div className='word' key={wordIndex}>
             {word.split('').map((char, charIndex) => (
               <span
@@ -169,10 +172,9 @@ function PromptBox({ timeSelect }) {
         value={userInput}
         placeholder=''
         onChange={(e) => {
-          processInput(e.target.value)
-          setTimeStart(true)
-        }
-      }
+          processInput(e.target.value);
+          setTimeStart(true);
+        }}
       />
     </div>
   );

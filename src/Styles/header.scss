@@ -22,25 +22,15 @@ $caret-color: #e2b714;
   list-style:none;
 }
 
-.header-list li {
+
+.header-btn {
+  border: none;
   padding-right: 20px;
-  letter-spacing: -1px;
-  text-decoration: none;
-  color: #8f8e84;
+  font-size: 16px;
+  color: $main-color;
 }
 
-.header-list li:hover {
-  padding-right: 20px;
-  letter-spacing: -1px;
-  text-decoration: none;
+.header-btn:hover {
   color: #e2b714;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:visited {
-  color: inherit;
-  text-decoration: none;
+  cursor: pointer;
 }

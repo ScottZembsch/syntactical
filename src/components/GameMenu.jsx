@@ -5,16 +5,16 @@ import '../Styles/gamemenu.scss';
 function GameMenu() {
 
 const [timeSelect, setTimeSelect] = useState(60);
-
+const [langSelect, setLangSelect] = useState('javascript');
 
   return (
     <>
       <div className='menu-container'>
         <div className='menu-items'>
           <div className='lang-container'>
-            <button className='lang-btn'>Javascript</button>
-            <button className='lang-btn'>Python</button>
-            <button className='lang-btn'>Rust</button>
+            <button className='lang-btn' onClick={() => setLangSelect('javascript')}>Javascript</button>
+            <button className='lang-btn' onClick={() => setLangSelect('python')}>Python</button>
+            <button className='lang-btn' onClick={() => setLangSelect('rust')}>Rust</button>
           </div>
           <div className='btn-container'>
             <button className='time-btn' onClick={()=> setTimeSelect(15)}>15</button>
@@ -23,7 +23,7 @@ const [timeSelect, setTimeSelect] = useState(60);
           </div>
         </div>
       </div>
-      <PromptBox timeSelect={timeSelect} />
+      <PromptBox timeSelect={timeSelect} langSelect={langSelect} />
     </>
   )
 }
