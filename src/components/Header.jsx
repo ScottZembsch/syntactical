@@ -12,8 +12,8 @@ function getStats(){
 
 
   return (
-    <div id='header'>   
-      <img id='logo' src={syntacticalLogo} alt="logo" />
+    <div id='header'>
+      <a href=""><img id='logo' src={syntacticalLogo} alt="logo" /></a>
       <ul className='header-list'>
         <button className='header-btn' onClick={() => getStats()}>Stats</button>
         <button className='header-btn'>My Account</button>

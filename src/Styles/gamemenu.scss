@@ -27,12 +27,24 @@ $caret-color: #e2b714;
 
 .lang-btn {
   border: solid #e2b714;
+  border-radius: 5px;
   width: 100px;
   color: whitesmoke
 }
 
+.lang-btn:hover {
+  background-color: #e2b714;
+  cursor: pointer;
+}
+
 .time-btn {
   border: solid $caret-color;
+  border-radius: 5px;
   width: 40px;
   color: whitesmoke;
+}
+
+.time-btn:hover {
+  background-color: #e2b714;
+  cursor: pointer;
 }
